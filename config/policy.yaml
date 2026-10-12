@@ -1,0 +1,21 @@
+# Agent policy controls (TRD Section 9 / POL rules). These are runtime-tunable in
+# the app's Admin page; changes are logged to the runtime state DB (policy_config).
+kill_switch: false            # true => agent never executes an option; only narrates
+
+default_level: L2             # triage severity bands:
+                              #   L1 auto-close low impact
+                              #   L2 standard triage
+                              #   L3 escalated (revenue-impacting, needs approval)
+
+l3:
+  max_order_value: 5000       # USD; above this a case is L3-eligible
+  min_confidence: 0.80
+  allowed_option_types: [expedite]
+  require_vendor_approved: true
+  require_source_valid: true
+  require_trigger: predictive # predictive trigger only; no purely rule-based escalation
+
+approval_bands:               # escalation bands by exposure (USD)
+  - {upto: 5000, approver: buyer}
+  - {upto: 50000, approver: purchasing_manager}
+  - {upto: null, approver: head_of_supply_chain}

@@ -1,0 +1,20 @@
+# Pre-registration (TR-DATA-4): these values are committed BEFORE any training or
+# eval run. Changing them after model fitting invalidates the experiment.
+#
+# h is drawn per line, uniformly from [7, 28], base 14 (TRD 5.1). tolerance_days
+# defines "confirmation received in time". recovery_* and baseline_* are the
+# pre-committed margins the recovery-analysis and DDL-baseline gates must meet
+# (TR-ML-2/TR-ENG-1); they are intentionally small but fixed in advance.
+label:
+  snapshot_h: {base: 14, min: 7, max: 28}
+  tolerance_days: 1
+
+recovery:
+  slice_lift_margin: 0.05   # min relative lift over the DDL baseline per slice
+  ablation_drop_margin: 0.02
+  seeds: 5
+
+baseline:
+  require_beat_margin: 0.02 # model must beat the DDL-baseline by >= this, else fall back
+
+committed: "2026-10-13"     # date this file was committed to the repo

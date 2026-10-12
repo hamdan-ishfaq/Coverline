@@ -1,0 +1,81 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "po-exception-triage"
+version = "0.1.0"
+description = "Agentic PO exception triage on mock, SAP-shaped data (portfolio demo)"
+readme = "docs/PRD.md"
+requires-python = "==3.12.*"
+# Curated floor bounds; the pinned set lives in requirements.lock (installed by CI).
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+    "xgboost>=2.1",
+    "shap>=0.46",
+    "ortools>=9.10",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "PyYAML>=6.0",
+    "SQLAlchemy>=2.0",
+    "langgraph>=0.2",
+    "plotly>=5.24",
+    "streamlit>=1.39",
+    "requests>=2.32",
+    "openai>=1.40",
+    "python-dotenv>=1.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["config*", "sap_schema*", "data_gen*", "models*", "engine*", "agent*", "app*", "evals*"]
+exclude = ["tests*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [".venv", "evals/cache", "models/artifacts", ".git"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "sap_schema", "data_gen", "models", "engine", "agent", "app", "evals"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+# Dependency rules from TRD Section 3, enforced by `lint-imports`
+# (see tests/unit/test_import_linter.py).
+[[tool.importlinter.contracts]]
+name = "engine imports only sap_schema and config"
+type = "forbidden"
+source_modules = ["engine"]
+forbidden_modules = ["agent", "app", "evals", "models"]
+
+[[tool.importlinter.contracts]]
+name = "models imports only sap_schema and config"
+type = "forbidden"
+source_modules = ["models"]
+forbidden_modules = ["agent", "app", "engine", "evals"]
+
+[[tool.importlinter.contracts]]
+name = "agent may import engine and models but never app or evals"
+type = "forbidden"
+source_modules = ["agent"]
+forbidden_modules = ["app", "evals"]
+
+[[tool.importlinter.contracts]]
+name = "app contains no business logic and never imports evals"
+type = "forbidden"
+source_modules = ["app"]
+forbidden_modules = ["evals"]
+
+[[tool.importlinter.contracts]]
+name = "evals is never imported by production code"
+type = "forbidden"
+source_modules = ["agent", "app", "engine", "models", "sap_schema", "config"]
+forbidden_modules = ["evals"]

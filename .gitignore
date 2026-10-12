@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.python-version.d/ # not used; .python-version is tracked intentionally
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+
+# Environment / secrets (never commit)
+.env
+.env.*
+*.key
+.secret-terms
+
+# Build artifacts (see TRD Section 4.1 for what IS committed)
+.artifacts/
+perf_tmp/
+dist/
+build/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

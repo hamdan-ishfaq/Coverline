@@ -1,0 +1,27 @@
+# Resolved dependency set used by CI and local installs (`pip install -r requirements.lock`).
+# Pinned versions chosen by hand at scaffold time; regenerate with pip-tools once the
+# Python 3.12 venv is up: `pip-compile pyproject.toml -o requirements.lock`.
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.1
+xgboost==2.1.1
+shap==0.46.0
+ortools==9.10.4067
+pydantic==2.9.2
+pydantic-settings==2.6.1
+PyYAML==6.0.2
+SQLAlchemy==2.0.35
+langchain-core==0.3.21
+langgraph==0.2.45
+plotly==5.24.1
+streamlit==1.39.0
+requests==2.32.3
+openai==1.40.3
+python-dotenv==1.0.1
+
+# Dev / quality tooling
+pytest==8.3.2
+hypothesis==6.112.1
+ruff==0.6.8
+import-linter==2.0

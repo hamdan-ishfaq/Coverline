@@ -1,0 +1,25 @@
+# LLM routing for the agent (TRD 2.3/7.3). One OpenAI-compatible client; providers
+# are tried in order until a key is present and the call succeeds (Groq -> Gemini ->
+# OpenRouter). mode selects live / replay / template. Base URLs and model ids are
+# labeled assumptions to be confirmed before the first live run.
+mode: replay
+temperature: 0
+
+providers:
+  - name: groq
+    base_url: https://api.groq.com/openai/v1
+    model: llama-3.3-70b-versatile
+    key_env: GROQ_API_KEY
+  - name: gemini
+    base_url: https://generativelanguage.googleapis.com/v1beta/openai
+    model: gemini-1.5-flash
+    key_env: GEMINI_API_KEY
+  - name: openrouter
+    base_url: https://openrouter.ai/api/v1
+    model: meta-llama/llama-3.3-70b-instruct
+    key_env: OPENROUTER_API_KEY
+
+rate_limit: {tokens_per_sec: 10, burst: 30}
+attempts: 3
+cache_path: evals/cache        # determinism: cache key excludes model_id (model stored in entry)
+prompt_versions: {narrate: narrate_v1, extract: extract_v1}

@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install pinned deps
+        run: pip install -r requirements.lock
+      - name: Lint
+        run: python tasks.py lint
+      - name: Unit + property tests
+        run: python tasks.py test
+      # Heavier pipeline lands with its modules (TRD Section 13):
+      # - name: Build tiny dataset + eval
+      #   run: |
+      #     python tasks.py data --seed 42 --size small
+      #     python tasks.py eval --mode replay
+      # - name: Gate checks
+      #   run: python evals/check_gates.py
+      # - name: Archive eval report
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: eval-report
+      #     path: evals/report/

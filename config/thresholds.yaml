@@ -1,0 +1,39 @@
+# Operationally critical thresholds (Appendix A + settled decisions).
+# prereg.yaml freezes the labeler/tolerance values BEFORE any test run; see TR-DATA-4.
+tolerance_days: 1
+
+# Per-line snapshot horizon h is drawn from [7, 28] with base 14 (TRD Section 5.1).
+snapshot_h:
+  base: 14
+  min: 7
+  max: 28
+
+projection_horizon_days: 120  # Options engine projection window (TR-pX)
+arrival_basis: p50            # sensitivity runs also use p90
+escalation_threshold_mode: cost_based  # chosen via cost matrix, not a fixed number
+
+near_tie:
+  pct: 0.02
+  abs_usd: 100.0
+
+drift:
+  min_obs_periods: 5
+  abs_days: 5
+  rel_pct: 0.20
+
+target_service_level: 0.95    # for expedite-success / fill-rate checks
+abc_cutoffs: [0.80, 0.95]     # cumulative spend share: A / B / C
+xyz_cutoffs:                  # demand-variability bands (CV): X / Y / Z
+  x: 0.5
+  y: 1.0
+
+scorecard_weights:
+  otif: 0.30
+  lateness: 0.20
+  lt_variability: 0.20
+  confirmation_changes: 0.15
+  spend_share: 0.15
+
+extract_min_confidence: 0.6
+email_length_cap: 4000        # chars; beyond this we don't attempt extraction
+mc_runs: 5000                 # Monte Carlo trials for cost of options

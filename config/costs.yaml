@@ -1,0 +1,38 @@
+# Economic assumptions (USD). Explicit values used by the cost engine and the
+# option simulator; they are deliberately labeled assumptions, not measured facts.
+currency: USD
+annual_carrying_rate: 0.20
+carrying_split: {capital: 0.10, physical: 0.10}
+
+# Cost of an unchanged PO going line-down, per priority tier, per day.
+line_down_cost_per_day:
+  A: 2000.0
+  B: 500.0
+  C: 100.0
+
+penalty_pct:
+  top_tier: 0.02   # POs secured with the top-tier po_price_condition
+  other: 0.005
+
+expedite_fee_pct: 0.10
+expedite_success:            # baseline success by vendor archetype
+  reliable: 0.85
+  seasonal: 0.70
+  single_source: 0.75
+  drifting: 0.60
+  chronically_late: 0.40
+
+transfer:                    # moving qty to an alternate vendor
+  reliability: 0.98
+  lead_time_days: 3
+  cost_pct: 0.02             # of transferred value
+
+order_fixed_cost: 50.0
+
+# Cost-matrix shape that drives threshold selection (TRD 12.3, ~5-10:1 FN:FP).
+threshold_cost_matrix:
+  c_false_negative: 5.0
+  c_false_positive: 1.0
+
+max_vendor_share_pct: 0.80   # single-source guard for expedite (TR-E-3)
+max_split_vendors: 2
